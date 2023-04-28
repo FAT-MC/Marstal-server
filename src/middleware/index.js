@@ -9,7 +9,7 @@ module.exports = function (app) {
 
   // Middleware to configure CORS
   app.use(cors({
-    origin: process.env.CLIENT_APP_ORGIN
+    origin: "*"
   }));
   // Middleware to validate Authentication
 }

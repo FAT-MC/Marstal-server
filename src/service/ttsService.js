@@ -19,7 +19,7 @@ const getSynthesizedAudio = async (text) => {
 
   // Performs the text-to-speech request
   const [response] = await client.synthesizeSpeech(request);
-  console.log(response.audioContent);
+
   return response.audioContent;
 }
 

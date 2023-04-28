@@ -1,7 +1,11 @@
 const express = require('express');
-const app = express();
-const rootRouter = express.Router();
+const { createServer } = require('http');
 const apiRouter = require("./api");
+const socketService = require("../src/service/socketService")
+
+const app = express();
+const httpServer = createServer(app);
+const rootRouter = express.Router();
 
 // Import middleware
 const setupMiddleware = require('./middleware');
@@ -15,4 +19,7 @@ app.use(rootRouter);
 
 // setup Auth route
 
-module.exports = app
+// config socket server
+socketService.configSocket(httpServer)
+
+module.exports = httpServer
