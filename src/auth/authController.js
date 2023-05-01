@@ -26,9 +26,10 @@ const validate = () => {
     body("access_token")
       .exists()
       .bail()
-      .withMessage("Empty login payload")
+      .withMessage("Error: Empty login payload")
       .isJWT()
-      .withMessage("Invalid login payload")
+      .bail()
+      .withMessage("Error: Invalid login payload")
   ]
 }
 
