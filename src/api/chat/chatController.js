@@ -1,7 +1,6 @@
-const {
-  ttsService,
-  openAIService
-} = require("../../service");
+const openAIService = require("../../service/openAIService");
+const ttsService = require("../../service/ttsService");
+
 
 const chatWithMessage = async (req, res) => {
   const message = req.body.message;

@@ -8,7 +8,7 @@ const getSynthesizedAudio = async (text) => {
   const request = {
     input: { text: text },
     // Select the language and SSML voice gender (optional)
-    voice: { languageCode: 'en-US', name: 'en-US-Neural2-C' },
+    voice: { languageCode: 'en-US', name: 'en-US-Neural2-D' },
     // select the type of audio encoding
     audioConfig: {
       audioEncoding: 'MP3',
@@ -19,7 +19,7 @@ const getSynthesizedAudio = async (text) => {
 
   // Performs the text-to-speech request
   const [response] = await client.synthesizeSpeech(request);
-  console.log(response.audioContent);
+
   return response.audioContent;
 }
 
