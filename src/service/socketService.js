@@ -1,13 +1,14 @@
 const { Server } = require('socket.io');
 const openAIService = require("./openAIService");
 const ttsService = require("./ttsService");
+const appConfig = require("../config");
 
 let io = null;
 
 const configSocket = (httpServer) => {
   io = new Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_APP_ORGIN
+      origin: appConfig.app.origin
     }
   });
 

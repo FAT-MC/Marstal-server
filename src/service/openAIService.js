@@ -1,20 +1,20 @@
 const { Configuration, OpenAIApi } = require("openai");
 const HttpsProxyAgent = require('https-proxy-agent');
-const memStore = require("../utils/memStore");
+const appConfig = require("../config");
 
 const configuration = new Configuration({
-  apiKey: process.env.OPEN_AI_API_KEY
+  apiKey: appConfig.app.openAIAPIKey
 });
 
 const openai = new OpenAIApi(configuration);
 
 const getAIResponse = async (message) => {
-  const proxy = process.env.PROXY_URL ? {
+  const proxy = appConfig.app.proxy ? {
     proxy: false,
-    httpAgent: HttpsProxyAgent(process.env.PROXY_URL),
-    httpsAgent: HttpsProxyAgent(process.env.PROXY_URL)
+    httpAgent: HttpsProxyAgent(appConfig.app.proxy),
+    httpsAgent: HttpsProxyAgent(appConfig.app.proxy)
   } : null;
-  
+
   const completion = await openai.createChatCompletion(
     {
       model: "gpt-3.5-turbo",

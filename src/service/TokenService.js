@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { getValue, setValue } = require("../utils/memStore");
+const appConfig = require("../config");
 
 const exchangeToken = async (oauthAccessToken) => {
   if (!oauthAccessToken) {
@@ -21,7 +22,7 @@ const exchangeToken = async (oauthAccessToken) => {
 
   console.log("new user. Generating token...")
   // otherwise generate a JWT token based on user's oauth token
-  const newToken = jwt.sign({ oauthAccessToken: oauthAccessToken }, process.env.JWT_KEY);
+  const newToken = jwt.sign({ oauthAccessToken: oauthAccessToken }, appConfig.app.jwt_key);
 
   // store the token in redis in two {token : email}, and {email : token} pairs
   await setValue(email, newToken);
