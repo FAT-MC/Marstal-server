@@ -2,6 +2,7 @@ const express = require('express');
 const { createServer } = require('http');
 const apiRouter = require("./api");
 const socketService = require("../src/service/socketService")
+const { configureStore } = require("./utils/memStore");
 
 const app = express();
 const httpServer = createServer(app);
@@ -20,6 +21,8 @@ app.use(rootRouter);
 // setup Auth route
 
 // config socket server
-socketService.configSocket(httpServer)
+socketService.configSocket(httpServer);
+
+configureStore();
 
 module.exports = httpServer

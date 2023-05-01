@@ -8,7 +8,7 @@ const getSynthesizedAudio = async (text) => {
   const request = {
     input: { text: text },
     // Select the language and SSML voice gender (optional)
-    voice: { languageCode: 'en-US', name: 'en-US-Neural2-C' },
+    voice: { languageCode: 'en-US', name: 'en-US-Neural2-D' },
     // select the type of audio encoding
     audioConfig: {
       audioEncoding: 'MP3',
