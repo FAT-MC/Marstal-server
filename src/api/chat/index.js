@@ -1,7 +1,7 @@
 const express = require('express');
-const apiRouter = express.Router();
+const chatRouter = express.Router();
 const chatController = require("./chatController");
 
-apiRouter.post("/", chatController.chatWithMessage)
+chatRouter.post("/", chatController.chatWithMessage)
 
-module.exports = apiRouter
+module.exports = chatRouter
