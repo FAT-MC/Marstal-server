@@ -31,7 +31,7 @@ const setValue = async (key, value) => {
 }
 
 const getValue = async (key) => {
-  if (!client) return
+  if (!client || !key) return null;
 
   try {
     return await client.get(key);
