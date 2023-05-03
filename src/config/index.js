@@ -8,7 +8,8 @@ const config = {
     origin: process.env.CLIENT_APP_ORGIN,
     proxy: process.env.PROXY_URL,
     jwt_key: process.env.JWT_KEY,
-    client_ids: process.env.CLIENT_IDS.split(',')
+    client_ids: process.env.CLIENT_IDS.split(','),
+    admin_key: process.env.ADMIN_KEY
   }
 };
 

@@ -1,5 +1,5 @@
 const { body, validationResult } = require("express-validator");
-const { exchangeToken } = require("../service/TokenService");
+const { exchangeToken } = require("../service/authService");
 
 const loginWithOAuthAccessToken = async (req, res) => {
   const result = validationResult(req);

@@ -8,7 +8,8 @@ const configModel = Joi.object({
     origin: Joi.string().required(),
     proxy: Joi.string(),
     jwt_key: Joi.string().required(),
-    client_ids: Joi.array().required()
+    client_ids: Joi.array().required(),
+    admin_key: Joi.string()
   }).required()
 });
 

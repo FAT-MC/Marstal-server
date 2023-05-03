@@ -21,9 +21,8 @@ const checkAuth = async (req, res, next) => {
 }
 
 const verifyAuthToken = async (token) => {
-  const userEmail = await getValue(token);
+  const userEmail = await getValue(token); // check if token is still in the registration
 
-  // do so that we then check if the token is still valid (still exist in our cache)
   if (!token || !userEmail) {
     throw new Error("Unauthorized")
   }
@@ -35,7 +34,18 @@ const verifyAuthToken = async (token) => {
   }
 }
 
+const checkAdmin = async (req, res, next) => {
+  const adminKey = req.headers["admin_key"];
+
+  if (!adminKey || adminKey !== appConfig.app.admin_key) {
+    return res.status(401).json({ error: "Invalid admin key" });
+  }
+
+  next()
+}
+
 module.exports = {
   checkAuth,
-  verifyAuthToken
+  verifyAuthToken,
+  checkAdmin
 }
