@@ -13,11 +13,10 @@ const configModel = Joi.object({
     admin_key: Joi.string()
   }).required(),
   db: Joi.object({
-    host: Joi.string().required,
-    port: Joi.string().required,
-    user: Joi.string().required,
-    password: Joi.string(),
-    database: Joi.string().required,
+    host: Joi.string().required(),
+    port: Joi.number().required(),
+    user: Joi.string().required(),
+    database: Joi.string().required()
   })
 });
 

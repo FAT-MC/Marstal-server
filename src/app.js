@@ -1,4 +1,6 @@
 const express = require('express');
+const knexConfig = require("./db/knex/knexfile");
+const knex = require('knex')(knexConfig);
 const { createServer } = require('http');
 const apiRouter = require("./api");
 const authRouter = require("./auth");
@@ -27,5 +29,14 @@ app.use(rootRouter);
 socketService.configSocket(httpServer);
 
 configureStore();
+
+// run DB migration
+knex.migrate.latest()
+  .then(() => {
+    console.log('Migrations applied successfully');
+  })
+  .catch((error) => {
+    console.error('Error applying migrations:', error);
+  });
 
 module.exports = httpServer
