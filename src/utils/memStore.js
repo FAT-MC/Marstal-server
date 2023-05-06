@@ -31,7 +31,7 @@ const setValue = async (key, value) => {
 }
 
 const getValue = async (key) => {
-  if (!client) return
+  if (!client || !key) return null;
 
   try {
     return await client.get(key);
@@ -41,10 +41,21 @@ const getValue = async (key) => {
   }
 }
 
+const removeKey = async (key) => {
+  if (!client || !key) return
+
+  try {
+    await client.del(key);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 module.exports = {
   configureStore,
   setValue,
-  getValue
+  getValue,
+  removeKey
 }
 
 

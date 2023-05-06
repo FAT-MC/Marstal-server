@@ -1,8 +1,11 @@
 const express = require('express');
 const { createServer } = require('http');
 const apiRouter = require("./api");
-const socketService = require("../src/service/socketService")
+const authRouter = require("./auth");
+const utilityRouter = require("./utility");
+const socketService = require("../src/service/socketService");
 const { configureStore } = require("./utils/memStore");
+const { checkAuth, checkAdmin } = require("./utils/helpers");
 
 const app = express();
 const httpServer = createServer(app);
@@ -14,11 +17,11 @@ const setupMiddleware = require('./middleware');
 // Call middleware function with the app instance
 setupMiddleware(app);
 
-// setup API routes
-rootRouter.use("/api", apiRouter);
+// setup routes
+rootRouter.use("/api", checkAuth, apiRouter);
+rootRouter.use("/auth", authRouter);
+rootRouter.use("/utility", checkAdmin, utilityRouter);
 app.use(rootRouter);
-
-// setup Auth route
 
 // config socket server
 socketService.configSocket(httpServer);

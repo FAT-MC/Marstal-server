@@ -1,13 +1,25 @@
 const { Server } = require('socket.io');
 const openAIService = require("./openAIService");
 const ttsService = require("./ttsService");
+const appConfig = require("../config");
+const { verifyAuthToken } = require("../utils/helpers");
 
 let io = null;
 
 const configSocket = (httpServer) => {
   io = new Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_APP_ORGIN
+      origin: appConfig.app.origin
+    }
+  });
+
+  io.use(async (socket, next) => {
+    try {
+      await verifyAuthToken(socket.handshake.auth.token);
+      next()
+    } catch (error) {
+      console.log(error)
+      next(error)
     }
   });
 
@@ -26,6 +38,8 @@ const configSocket = (httpServer) => {
       }
     })
   });
+
+
 }
 
 module.exports = {
