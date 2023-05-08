@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
 const { getValue } = require("./memStore");
 const appConfig = require("../config");
 
@@ -13,22 +14,20 @@ const checkAuth = async (req, res, next) => {
   }
 
   try {
-    await verifyAuthToken(token);
+    verifyAuthToken(token);
     next()
   } catch (error) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 }
 
-const verifyAuthToken = async (token) => {
-  const userEmail = await getValue(token); // check if token is still in the registration
-
-  if (!token || !userEmail) {
+const verifyAuthToken = (token) => {
+  if (!token) {
     throw new Error("Unauthorized")
   }
 
   try {
-    return jwt.verify(token, appConfig.app.jwt_key);
+    return jwt.verify(token, appConfig.app.access_token_jwt_secret);
   } catch (err) {
     throw new Error("Unauthorized")
   }
@@ -44,8 +43,13 @@ const checkAdmin = async (req, res, next) => {
   next()
 }
 
+const generateRandomName = () => {
+  return uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] });
+}
+
 module.exports = {
   checkAuth,
   verifyAuthToken,
-  checkAdmin
+  checkAdmin,
+  generateRandomName
 }

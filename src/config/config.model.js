@@ -8,7 +8,10 @@ const configModel = Joi.object({
     logging: Joi.boolean().required(),
     origin: Joi.string().required(),
     proxy: Joi.string(),
-    jwt_key: Joi.string().required(),
+    access_token_jwt_secret: Joi.string().required(),
+    refresh_token_jwt_secret: Joi.string().required(),
+    refresh_token_jwt_exp: Joi.string().required(),
+    access_token_jwt_exp: Joi.string().required(),
     client_ids: Joi.array().required(),
     admin_key: Joi.string()
   }).required(),
