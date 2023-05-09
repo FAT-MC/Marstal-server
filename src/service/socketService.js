@@ -15,7 +15,7 @@ const configSocket = (httpServer) => {
 
   io.use(async (socket, next) => {
     try {
-      await verifyAuthToken(socket.handshake.auth.token);
+      verifyAuthToken(socket.handshake.auth.token);
       next()
     } catch (error) {
       console.log(error)
@@ -24,6 +24,7 @@ const configSocket = (httpServer) => {
   });
 
   io.on('connection', (socket) => {
+    const authToken = socket.handshake.auth.token;
     console.log(`New socket connection: ${socket.id}`);
 
     socket.on('disconnect', () => {
@@ -35,6 +36,12 @@ const configSocket = (httpServer) => {
         const aiResponse = await openAIService.getAIResponse(message);
         const aiAudioResponse = await ttsService.getSynthesizedAudio(aiResponse);
         io.emit("response", { audioData: aiAudioResponse })
+      }
+
+      try {
+        verifyAuthToken(authToken);
+      } catch (error) {
+        socket.disconnect();
       }
     })
   });
