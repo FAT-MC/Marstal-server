@@ -2,7 +2,7 @@ const { Server } = require('socket.io');
 const openAIService = require("./openAIService");
 const ttsService = require("./ttsService");
 const appConfig = require("../config");
-const { verifyAuthToken } = require("../utils/helpers");
+const { verifyAuthToken } = require("../service/tokenService");
 
 let io = null;
 
