@@ -1,36 +1,42 @@
 const { body, validationResult } = require("express-validator");
-const openAIService = require("../../service/openAIService");
-const ttsService = require("../../service/ttsService");
+const { initializeNewChat, retriveAllUserChats } = require("../../service/chatService");
+const { generateRandomName } = require("../../utils/helpers");
 
-
-const chatWithMessage = async (req, res) => {
+const createNewChat = async (req, res) => {
   const result = validationResult(req);
 
   if (!result.isEmpty()) {
     return res.status(400).send({ errors: result.array() });
   }
 
-  const message = req.body.message;
-  const aiResponse = await openAIService.getAIResponse(message);
-  const aiAudioResponse = await ttsService.getSynthesizedAudio(aiResponse);
-  res.status(201).json({ audioData: aiAudioResponse });
+  const userId = req.userId;
+
+  try {
+    const newChatId = await initializeNewChat(generateRandomName(), userId);
+    return res.status(201).json(newChatId);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 }
 
-const validate = () => {
-  return [
-    body("message")
-      .exists()
-      .bail()
-      .notEmpty()
-      .bail()
-      .withMessage("Error: Empty chat message")
-      .isString()
-      .bail()
-      .withMessage("Error: Invalid chat message")
-  ]
+const getUserChats = async (req, res) => {
+  const result = validationResult(req);
+
+  if (!result.isEmpty()) {
+    return res.status(400).send({ errors: result.array() });
+  }
+
+  const userId = req.userId;
+
+  try {
+    const userChats = await retriveAllUserChats(userId);
+    return res.status(200).json(userChats);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 }
 
 module.exports = {
-  chatWithMessage,
-  validate
+  createNewChat,
+  getUserChats
 }

@@ -21,8 +21,8 @@ const loginWithOAuthAccessToken = async (req, res) => {
         userOAuthInfo.name = generateRandomName();
       }
 
-      user = await createUser(userOAuthInfo); // partial user data => { id: xxx }
-      console.log(`New user ${userOAuthInfo.name} created`);
+      user = await createUser(userOAuthInfo); 
+      console.log(`New user ${user.username} created`);
     }
 
     const tokens = await issueTokens(user);
