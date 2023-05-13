@@ -39,7 +39,8 @@ const checkAuth = async (req, res, next) => {
   }
 
   try {
-    verifyAuthToken(token);
+    const decoded = verifyAuthToken(token);
+    req.userId = decoded.userId;
     next()
   } catch (error) {
     return res.status(401).json({ error: "Unauthorized" });

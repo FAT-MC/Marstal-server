@@ -15,7 +15,8 @@ const configSocket = (httpServer) => {
 
   io.use(async (socket, next) => {
     try {
-      verifyAuthToken(socket.handshake.auth.token);
+      const decoded = verifyAuthToken(socket.handshake.auth.token);
+      socket.userId = decoded.userId;
       next()
     } catch (error) {
       console.log(error)

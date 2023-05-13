@@ -13,7 +13,7 @@ exports.up = function (knex) {
     .createTable("chat_messages", (chatsTable) => {
       chatsTable.increments("id").primary();
       chatsTable.string("role").notNullable();
-      chatsTable.text("message").notNullable();
+      chatsTable.text("content").notNullable();
       chatsTable.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
       chatsTable.integer("chat_id").notNullable().unsigned().references("id").inTable("chats");
     })
