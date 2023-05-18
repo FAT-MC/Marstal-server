@@ -16,8 +16,8 @@ module.exports = {
     getChatById: `SELECT * FROM chats WHERE id = $1`
   },
   chatMessageQueries: {
-    createMessage: `INSERT INTO chat_messages (role, content, chat_id) VALUES ($1, $2, $3) RETURNING *`,
-    getMessagesByChatId: `SELECT * FROM chat_messages WHERE chat_id = $1`,
+    createMessage: `INSERT INTO chat_messages (role, content, chat_id) VALUES ($1, $2, $3) RETURNING id, role, content, EXTRACT(EPOCH FROM created_at)::integer AS created_at, chat_id;`,
+    getMessagesByChatId: `SELECT id, role, content, EXTRACT(epoch FROM created_at)::integer AS created_at, chat_id FROM chat_messages WHERE chat_id = $1`,
     getMessageById: `SELECT * FROM chat_messages WHERE id = $1`
   }
 }

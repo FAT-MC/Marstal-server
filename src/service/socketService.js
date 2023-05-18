@@ -1,6 +1,5 @@
 const { Server } = require('socket.io');
-const openAIService = require("./openAIService");
-const ttsService = require("./ttsService");
+const { postMessage, MessageEvent } = require('./chatMessageService');
 const appConfig = require("../config");
 const { verifyAuthToken } = require("../service/tokenService");
 
@@ -32,11 +31,19 @@ const configSocket = (httpServer) => {
       console.log(`Socket disconnected: ${socket.id}`);
     });
 
-    socket.on("chat", async (message) => {
-      if (message) {
-        const aiResponse = await openAIService.getAIResponse(message);
-        const aiAudioResponse = await ttsService.getSynthesizedAudio(aiResponse);
-        io.emit("response", { audioData: aiAudioResponse })
+    socket.on("chat", async (messagePayload, errorHandler) => {
+      const { chatId, message, audio } = messagePayload;
+
+      if (chatId && message) {
+        try {
+          await postMessage(chatId, message, audio, (eventPayload) => {
+            socket.emit('response', eventPayload)
+          });
+        } catch (error) {
+          errorHandler({
+            error: error.message
+          })
+        }
       }
 
       try {
