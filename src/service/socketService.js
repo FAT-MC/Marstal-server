@@ -1,8 +1,7 @@
 const { Server } = require('socket.io');
-const openAIService = require("./openAIService");
-const ttsService = require("./ttsService");
+const { postMessage, MessageEvent } = require('./chatMessageService');
 const appConfig = require("../config");
-const { verifyAuthToken } = require("../utils/helpers");
+const { verifyAuthToken } = require("../service/tokenService");
 
 let io = null;
 
@@ -15,7 +14,8 @@ const configSocket = (httpServer) => {
 
   io.use(async (socket, next) => {
     try {
-      await verifyAuthToken(socket.handshake.auth.token);
+      const decoded = verifyAuthToken(socket.handshake.auth.token);
+      socket.userId = decoded.userId;
       next()
     } catch (error) {
       console.log(error)
@@ -24,17 +24,32 @@ const configSocket = (httpServer) => {
   });
 
   io.on('connection', (socket) => {
+    const authToken = socket.handshake.auth.token;
     console.log(`New socket connection: ${socket.id}`);
 
     socket.on('disconnect', () => {
       console.log(`Socket disconnected: ${socket.id}`);
     });
 
-    socket.on("chat", async (message) => {
-      if (message) {
-        const aiResponse = await openAIService.getAIResponse(message);
-        const aiAudioResponse = await ttsService.getSynthesizedAudio(aiResponse);
-        io.emit("response", { audioData: aiAudioResponse })
+    socket.on("chat", async (messagePayload, errorHandler) => {
+      const { chatId, message, audio } = messagePayload;
+
+      if (chatId && message) {
+        try {
+          await postMessage(chatId, message, audio, (eventPayload) => {
+            socket.emit('response', eventPayload)
+          });
+        } catch (error) {
+          errorHandler({
+            error: error.message
+          })
+        }
+      }
+
+      try {
+        verifyAuthToken(authToken);
+      } catch (error) {
+        socket.disconnect();
       }
     })
   });

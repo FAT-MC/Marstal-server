@@ -10,8 +10,8 @@ const config = {
     proxy: process.env.PROXY_URL,
     access_token_jwt_secret: process.env.ACCESS_TOKEN_JWT_SECRET,
     refresh_token_jwt_secret: process.env.REFRESH_TOKEN_JWT_SECRET,
-    refresh_token_jwt_exp: process.env.ACCESS_TOKEN_JWT_EXP,
-    access_token_jwt_exp: process.env.REFRESH_TOKEN_JWT_EXP,
+    access_token_jwt_exp: process.env.ACCESS_TOKEN_JWT_EXP,
+    refresh_token_jwt_exp: process.env.REFRESH_TOKEN_JWT_EXP,
     client_ids: process.env.CLIENT_IDS.split(','),
     admin_key: process.env.ADMIN_KEY
   },

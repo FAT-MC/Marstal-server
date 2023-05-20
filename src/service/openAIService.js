@@ -7,18 +7,18 @@ const configuration = new Configuration({
 });
 
 const openai = new OpenAIApi(configuration);
+const proxy = appConfig.app.proxy ? {
+  proxy: false,
+  httpAgent: HttpsProxyAgent(appConfig.app.proxy),
+  httpsAgent: HttpsProxyAgent(appConfig.app.proxy)
+} : null;
 
-const getAIResponse = async (message) => {
-  const proxy = appConfig.app.proxy ? {
-    proxy: false,
-    httpAgent: HttpsProxyAgent(appConfig.app.proxy),
-    httpsAgent: HttpsProxyAgent(appConfig.app.proxy)
-  } : null;
 
+const getAIResponse = async (messageContext, message) => {
   const completion = await openai.createChatCompletion(
     {
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: message }],
+      messages: [...messageContext, { role: "user", content: message }],
     },
     proxy
   );
