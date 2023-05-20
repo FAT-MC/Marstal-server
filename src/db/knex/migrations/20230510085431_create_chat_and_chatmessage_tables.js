@@ -10,12 +10,12 @@ exports.up = function (knex) {
       chatsTable.timestamps(true, true);
       chatsTable.integer("user_id").notNullable().unsigned().references("id").inTable("users");
     })
-    .createTable("chat_messages", (chatsTable) => {
-      chatsTable.increments("id").primary();
-      chatsTable.string("role").notNullable();
-      chatsTable.text("content").notNullable();
-      chatsTable.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
-      chatsTable.integer("chat_id").notNullable().unsigned().references("id").inTable("chats");
+    .createTable("chat_messages", (chatMessagesTable) => {
+      chatMessagesTable.increments("id").primary();
+      chatMessagesTable.string("role").notNullable();
+      chatMessagesTable.text("content").notNullable();
+      chatMessagesTable.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
+      chatMessagesTable.integer("chat_id").notNullable().unsigned().references("id").inTable("chats");
     })
 };
 
